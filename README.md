@@ -29,6 +29,21 @@ git clone <this-repo> ~/dev/zsh_config
 Then in iTerm2: Settings, Profiles, Text, set the font to MesloLGS NF (or
 MesloLGS Nerd Font from the Brewfile cask).
 
+## iTerm2 colors
+
+The prompt themes expect a matching terminal palette (background + 16 ANSI
+colors); eza, ls, and syntax highlighting follow the ANSI palette
+automatically. Import the preset:
+
+```
+open iterm/gruvbox-dark.itermcolors
+```
+
+then select it in Settings, Profiles, Colors, Color Presets. Presets are
+generated from `iterm/make_itermcolors.py`; add a palette there for new
+themes. Keep the Minimum Contrast slider at 0 or iTerm2 will distort the
+prompt's tuned colors.
+
 ## Try without touching the live shell
 
 ```

@@ -10,7 +10,8 @@ typeset -g ZSH_PROMPT_THEME="gruvbox"   # gruvbox | catppuccin-mocha | nord
   source "$ZSH_CONFIG_DIR/themes/$ZSH_PROMPT_THEME.zsh"
 
 source "$_brew_share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=245"   # dimmed ghost text
+# Dimmed ghost text; theme files may set their own matching grey
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="${ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE:-fg=245}"
 
 # Syntax highlighting must be sourced last of all plugins
 source "$_brew_share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
