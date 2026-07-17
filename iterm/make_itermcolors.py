@@ -6,6 +6,21 @@ Usage: python3 make_itermcolors.py  (writes <name>.itermcolors next to itself)
 from pathlib import Path
 
 PALETTES = {
+    "headroom-dark": {
+        # Headroom Studio brand palette (headroom/DESIGN-SYSTEM.md).
+        # Functional colors (red/yellow/cyan/magenta) derived to sit in the
+        # same saturation family as the periwinkle accent.
+        "Ansi 0": "1c1c28", "Ansi 1": "e8718a", "Ansi 2": "3ecf7c",
+        "Ansi 3": "dbb671", "Ansi 4": "5aabee", "Ansi 5": "ab8df0",
+        "Ansi 6": "74c2d8", "Ansi 7": "a8a8c0",
+        "Ansi 8": "3a3a52", "Ansi 9": "f28a9c", "Ansi 10": "63dd96",
+        "Ansi 11": "e6c689", "Ansi 12": "7c84f6", "Ansi 13": "c3a6f7",
+        "Ansi 14": "8fd4e3", "Ansi 15": "eeeef6",
+        "Background": "0b0b0f", "Foreground": "cbcbdb",
+        "Bold": "eeeef6", "Cursor": "7c84f6", "Cursor Text": "0b0b0f",
+        "Selection": "28283a", "Selected Text": "eeeef6",
+        "Link": "7c84f6",
+    },
     "gruvbox-dark": {
         # Official gruvbox dark palette, https://github.com/morhetz/gruvbox
         "Ansi 0": "282828", "Ansi 1": "cc241d", "Ansi 2": "98971a",

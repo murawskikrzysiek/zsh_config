@@ -5,7 +5,7 @@ source "$_brew_share/powerlevel10k/powerlevel10k.zsh-theme"
 [[ -f "$ZSH_CONFIG_DIR/p10k.zsh" ]] && source "$ZSH_CONFIG_DIR/p10k.zsh"
 
 # Color scheme override, see themes/. Empty string = p10k defaults.
-typeset -g ZSH_PROMPT_THEME="gruvbox"   # gruvbox | catppuccin-mocha | nord
+typeset -g ZSH_PROMPT_THEME="headroom"   # headroom | gruvbox | catppuccin-mocha | nord
 [[ -n $ZSH_PROMPT_THEME && -f "$ZSH_CONFIG_DIR/themes/$ZSH_PROMPT_THEME.zsh" ]] &&
   source "$ZSH_CONFIG_DIR/themes/$ZSH_PROMPT_THEME.zsh"
 
