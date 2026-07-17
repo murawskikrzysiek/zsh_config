@@ -1,0 +1,37 @@
+{
+  "Keyboard Map": {
+    "0x7f-0x100000": {
+      "Action": 11,
+      "Text": "0x15"
+    },
+    "0x7f-0x80000": {
+      "Action": 11,
+      "Text": "0x1b 0x7f"
+    },
+    "0xf702-0x280000": {
+      "Action": 10,
+      "Text": "b"
+    },
+    "0xf702-0x300000": {
+      "Action": 11,
+      "Text": "0x1"
+    },
+    "0xf703-0x280000": {
+      "Action": 10,
+      "Text": "f"
+    },
+    "0xf703-0x300000": {
+      "Action": 11,
+      "Text": "0x5"
+    },
+    "0xf728-0x0": {
+      "Action": 11,
+      "Text": "0x4"
+    },
+    "0xf728-0x80000": {
+      "Action": 10,
+      "Text": "d"
+    }
+  },
+  "Normal Font": "JetBrainsMonoNFM-Regular 12"
+}

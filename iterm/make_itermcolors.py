@@ -67,3 +67,35 @@ for name, colors in PALETTES.items():
     out += "</dict>\n</plist>\n"
     (here / f"{name}.itermcolors").write_text(out)
     print(f"wrote {name}.itermcolors")
+
+
+# ── iTerm2 dynamic profile ────────────────────────────────────────────────────
+# Bundles the headroom palette with the key mappings + font extracted from the
+# original profile (keyboard-map.json). install.sh drops the output into
+# ~/Library/Application Support/iTerm2/DynamicProfiles; iTerm2 picks it up
+# live. Everything not specified inherits from the "Default" profile.
+import json
+
+def color_component(hexval):
+    r, g, b = (int(hexval[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    return {
+        "Color Space": "sRGB",
+        "Red Component": r, "Green Component": g, "Blue Component": b,
+        "Alpha Component": 1,
+    }
+
+keymap = json.loads((here / "keyboard-map.json").read_text())
+profile = {
+    "Name": "Headroom",
+    "Guid": "headroom-terminal-profile",
+    "Dynamic Profile Parent Name": "Default",
+    "Normal Font": keymap["Normal Font"],
+    "Keyboard Map": keymap["Keyboard Map"],
+    "Minimum Contrast": 0,
+}
+for key, hexval in PALETTES["headroom-dark"].items():
+    profile[f"{key} Color"] = color_component(hexval)
+
+(here / "headroom.profile.json").write_text(
+    json.dumps({"Profiles": [profile]}, indent=2, sort_keys=True) + "\n")
+print("wrote headroom.profile.json")

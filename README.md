@@ -13,6 +13,7 @@ zsh/env.zsh       history, setopts, PATH
 zsh/tools.zsh     compinit, zoxide, fzf, atuin, bat/eza/uv/ripgrep
 zsh/aliases.zsh   aliases
 zsh/functions.zsh custom one-command workflows (ex-OMZ custom plugins)
+zsh/keybindings.zsh word granularity, Ctrl+Z toggle, line editing
 zsh/python.zsh    .venv auto-activate/deactivate on cd
 zsh/prompt.zsh    p10k + plugins (keep last)
 Brewfile          all dependencies
@@ -43,6 +44,13 @@ then select it in Settings, Profiles, Colors, Color Presets. Presets are
 generated from `iterm/make_itermcolors.py`; add a palette there for new
 themes. Keep the Minimum Contrast slider at 0 or iTerm2 will distort the
 prompt's tuned colors.
+
+Alternatively use the versioned profile: `install.sh` drops
+`iterm/headroom.profile.json` into iTerm2's DynamicProfiles, creating a
+"Headroom" profile with the colors, font, and option/cmd key mappings
+(`iterm/keyboard-map.json`) in one piece. Set it as default in Settings,
+Profiles. Regenerate it with `make_itermcolors.py` after palette or
+keymap changes.
 
 ## Try without touching the live shell
 

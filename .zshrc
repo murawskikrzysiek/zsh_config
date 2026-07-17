@@ -12,5 +12,6 @@ source "$ZSH_CONFIG_DIR/zsh/env.zsh"
 source "$ZSH_CONFIG_DIR/zsh/tools.zsh"
 source "$ZSH_CONFIG_DIR/zsh/aliases.zsh"
 source "$ZSH_CONFIG_DIR/zsh/functions.zsh"
+source "$ZSH_CONFIG_DIR/zsh/keybindings.zsh"
 source "$ZSH_CONFIG_DIR/zsh/python.zsh"
 source "$ZSH_CONFIG_DIR/zsh/prompt.zsh"   # keep last: syntax highlighting must load after everything else

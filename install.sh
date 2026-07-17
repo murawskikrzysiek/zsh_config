@@ -27,4 +27,11 @@ if [[ ! -e "$HOME/.zprofile" ]]; then
   printf '\neval "$(/opt/homebrew/bin/brew shellenv)"\n' > "$HOME/.zprofile"
 fi
 
+DP_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+if [[ -d "$HOME/Library/Application Support/iTerm2" ]]; then
+  echo "==> Installing iTerm2 'Headroom' dynamic profile"
+  mkdir -p "$DP_DIR"
+  cp "$REPO_DIR/iterm/headroom.profile.json" "$DP_DIR/"
+fi
+
 echo "==> Done. Restart the terminal or run: exec zsh"
