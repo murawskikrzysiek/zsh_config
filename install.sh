@@ -17,6 +17,12 @@ brew bundle --file="$REPO_DIR/Brewfile"
 if [[ -e "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
   echo "==> Backing up existing ~/.zshrc to ~/.zshrc.backup-$TS"
   mv "$HOME/.zshrc" "$HOME/.zshrc.backup-$TS"
+  echo
+  echo "==> Review these lines from the old config; anything machine-specific"
+  echo "    (secrets, proxies, PATH entries, tool hooks) goes in ~/.zshrc.local:"
+  grep -nE '^[[:space:]]*(export|alias|eval|source|\.)[[:space:]]' \
+    "$HOME/.zshrc.backup-$TS" || echo "    (nothing found)"
+  echo
 fi
 
 echo "==> Linking ~/.zshrc -> $REPO_DIR/.zshrc"

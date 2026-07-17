@@ -15,3 +15,8 @@ source "$ZSH_CONFIG_DIR/zsh/functions.zsh"
 source "$ZSH_CONFIG_DIR/zsh/keybindings.zsh"
 source "$ZSH_CONFIG_DIR/zsh/python.zsh"
 source "$ZSH_CONFIG_DIR/zsh/prompt.zsh"   # keep last: syntax highlighting must load after everything else
+
+# Machine-local overrides, never committed: secrets, work proxies, extra
+# PATH entries, machine-specific aliases. Loaded last so it can override
+# anything above.
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

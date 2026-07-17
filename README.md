@@ -52,6 +52,13 @@ Alternatively use the versioned profile: `install.sh` drops
 Profiles. Regenerate it with `make_itermcolors.py` after palette or
 keymap changes.
 
+## Machine-local overrides
+
+`~/.zshrc.local` (untracked, per machine) is sourced last if it exists. Put
+secrets, work proxies, machine-specific PATH entries and aliases there —
+never in the repo. `install.sh` prints candidate lines from the previous
+config after backing it up.
+
 ## Try without touching the live shell
 
 ```

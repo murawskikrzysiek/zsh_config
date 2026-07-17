@@ -19,7 +19,6 @@ brew "ripgrep"
 # Python
 brew "uv"
 
-# Powerline glyph font for iTerm2 (select "MesloLGS Nerd Font" in the profile).
-# On this Mac the original "MesloLGS NF" is already installed; on a fresh
-# machine this cask provides an equivalent that p10k renders correctly.
-cask "font-meslo-lg-nerd-font"
+# The font the Headroom iTerm2 profile pins (JetBrainsMonoNFM-Regular).
+# Also the design system's --font-mono.
+cask "font-jetbrains-mono-nerd-font"
