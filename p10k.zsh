@@ -44,6 +44,9 @@
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     status                  # exit code of the last command
+    command_execution_time  # duration of the last command (only if >3s)
+    background_jobs         # presence of background jobs
+    context                 # user@hostname (only over SSH or as root)
     time                    # current time
     # Full menu of available segments: git log for this file, or
     # https://github.com/romkatv/powerlevel10k#batteries-included
