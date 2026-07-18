@@ -33,11 +33,15 @@ if [[ ! -e "$HOME/.zprofile" ]]; then
   printf '\neval "$(/opt/homebrew/bin/brew shellenv)"\n' > "$HOME/.zprofile"
 fi
 
+# iTerm2 reads this directory on launch, so installing before its first run
+# is fine.
 DP_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
-if [[ -d "$HOME/Library/Application Support/iTerm2" ]]; then
-  echo "==> Installing iTerm2 'Headroom' dynamic profile"
-  mkdir -p "$DP_DIR"
-  cp "$REPO_DIR/iterm/headroom.profile.json" "$DP_DIR/"
-fi
+echo "==> Installing iTerm2 'Headroom' dynamic profile"
+mkdir -p "$DP_DIR"
+cp "$REPO_DIR/iterm/headroom.profile.json" "$DP_DIR/"
 
-echo "==> Done. Restart the terminal or run: exec zsh"
+echo "==> Done. Remaining manual steps:"
+echo "    1. Restart iTerm2 (or open a new tab) and run: exec zsh"
+echo "    2. iTerm2 Settings > Profiles > Headroom > Other Actions >"
+echo "       Set as Default Profile — this applies the Nerd Font and colors."
+echo "       Without it, prompt glyphs render as boxes."
