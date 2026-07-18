@@ -48,4 +48,4 @@ if command -v uv &>/dev/null; then
 fi
 
 # ── ripgrep config ────────────────────────────────────────────────────────────
-export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+export RIPGREP_CONFIG_PATH="$ZSH_CONFIG_DIR/ripgrep.conf"
