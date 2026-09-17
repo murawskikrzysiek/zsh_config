@@ -67,23 +67,29 @@ keybind = alt+delete=text:\x1bd
 # Ghostty has no equivalent of iTerm2's "send input to all panes" and no saved
 # window arrangements; tmux covers both if you need them.
 
-# ── Quick terminal (iTerm2's hotkey window) ──────────────────────────────────
-# One global hotkey from anywhere in macOS: the terminal slides in over the
-# app in front, a second press hides it and focus goes back to that app.
-# `global:` means the binding works while Ghostty is not the active app;
-# macOS may ask for Accessibility permission the first time — without it the
-# hotkey only fires inside Ghostty.
+# ── Global show/hide hotkey ──────────────────────────────────────────────────
+# Cmd+grave from any app brings the Ghostty windows you already have back to
+# the front — same screen position, same splits, same scrollback, same running
+# processes — and the next press hides them again, handing focus back to the
+# app underneath. The app keeps running the whole time; nothing is restarted.
 #
-# Cmd+grave mirrors the iTerm2 default. It shadows macOS's "cycle windows of
+# `global:` is what makes it fire while another app is active. macOS may ask
+# for Accessibility permission the first time; without it the binding only
+# works inside Ghostty.
+#
+# Cmd+grave mirrors the iTerm2 hotkey. It shadows macOS's "cycle windows of
 # the active app" while Ghostty is focused, so swap it if that matters, e.g.
 # global:alt+space or global:ctrl+grave.
-keybind = global:cmd+grave=toggle_quick_terminal
+keybind = global:cmd+grave=toggle_visibility
 
-# Slides down from the top edge, on the screen the pointer is on, and hides
-# itself as soon as focus moves elsewhere — click away and it is gone.
-quick-terminal-position = top
-quick-terminal-screen = mouse
-quick-terminal-autohide = true
+# Across a full restart of Ghostty (or of the Mac) it is window-save-state,
+# set above, that brings the windows back — layout and working directories,
+# not live processes or scrollback.
+#
+# For the other flavor of hotkey window — a dropdown scratch terminal that is
+# separate from your real windows, iTerm2's "hotkey window" proper — bind this
+# instead and place it with quick-terminal-position / -screen / -autohide:
+# keybind = global:cmd+grave=toggle_quick_terminal
 
 # ── Clipboard and safety ─────────────────────────────────────────────────────
 # These match Ghostty's current defaults; pinned explicitly so a future change

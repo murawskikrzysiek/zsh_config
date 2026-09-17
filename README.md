@@ -155,10 +155,12 @@ Ghostty specifics worth knowing:
 - `macos-option-as-alt` is deliberately left off: it would turn Option into
   Meta everywhere and kill Option+a / Option+l for ą, ł and friends. The
   explicit `keybind` lines cover the editing keys instead.
-- the quick terminal replaces iTerm2's hotkey window: `Cmd+backtick` from
-  any app slides it in, pressing again returns focus where it was. The
-  binding needs the `global:` prefix, and macOS may ask for Accessibility
-  permission before a global hotkey fires outside Ghostty.
+- `Cmd+backtick` from any app raises the existing Ghostty windows as they
+  were and hides them again on the next press, focus returning to the app
+  underneath. The binding needs the `global:` prefix, and macOS may ask for
+  Accessibility permission before a global hotkey fires outside Ghostty.
+  `toggle_quick_terminal` is the alternative: a separate dropdown surface
+  rather than your real windows.
 - reload after an edit with Cmd+Shift+, ; validate with `ghostty +validate-config`
 
 ### If Ghostty is not approved either
