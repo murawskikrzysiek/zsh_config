@@ -6,13 +6,18 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TS="$(date +%Y-%m-%d-%H%M%S)"
 
-if ! command -v brew >/dev/null 2>&1; then
+# SKIP_BREW=1 leaves Homebrew alone — for locked-down machines where casks
+# (Ghostty, the font) are installed by IT, or for a config-only refresh.
+if [[ "${SKIP_BREW:-0}" == 1 ]]; then
+  echo "==> SKIP_BREW=1: skipping Homebrew, assuming dependencies are present"
+elif ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is required. Install it first: https://brew.sh" >&2
+  echo "Or re-run with SKIP_BREW=1 to only link the config files." >&2
   exit 1
+else
+  echo "==> Installing dependencies from Brewfile"
+  brew bundle --file="$REPO_DIR/Brewfile"
 fi
-
-echo "==> Installing dependencies from Brewfile"
-brew bundle --file="$REPO_DIR/Brewfile"
 
 if [[ -e "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
   echo "==> Backing up existing ~/.zshrc to ~/.zshrc.backup-$TS"

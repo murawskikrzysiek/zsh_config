@@ -55,6 +55,34 @@ Ghostty needs nothing else: colors, font and key bindings come from the
 config file. In iTerm2 one manual step remains — Settings, Profiles, select
 **Headroom**, Other Actions, **Set as Default Profile**.
 
+### Updating a machine that already has it
+
+```
+cd ~/dev/zsh_config
+git pull
+./install.sh
+```
+
+`install.sh` is idempotent: an already-symlinked `~/.zshrc` is left alone, only
+a real file gets backed up. The rerun is what installs Ghostty, links
+`~/.config/ghostty/`, and (unlike before) touches the iTerm2 profile only if
+iTerm2 is on the machine. Then quit and reopen the terminal.
+
+An existing hand-written `~/.config/ghostty/config` is moved aside to
+`config.backup-<timestamp>` in the same directory — copy anything you want to
+keep into `ghostty/config` here, or into `~/.config/ghostty/config.local`
+referenced from it, so the next pull keeps it.
+
+If Homebrew must not run — locked-down machine, casks installed by IT, or you
+just want the config files relinked:
+
+```
+SKIP_BREW=1 ./install.sh
+```
+
+Ghostty then has to be installed separately; everything else is already there
+from the previous run.
+
 ### Migrating the old config
 
 Machine-specific state never goes in the repo. Copy anything relevant from
