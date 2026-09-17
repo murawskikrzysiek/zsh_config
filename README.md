@@ -155,7 +155,7 @@ Ghostty specifics worth knowing:
 - `macos-option-as-alt` is deliberately left off: it would turn Option into
   Meta everywhere and kill Option+a / Option+l for ą, ł and friends. The
   explicit `keybind` lines cover the editing keys instead.
-- `Cmd+backtick` from any app raises the existing Ghostty windows as they
+- `Cmd+§` (the key left of "1") from any app raises the existing Ghostty windows as they
   were and hides them again on the next press, focus returning to the app
   underneath. The binding needs the `global:` prefix, and macOS may ask for
   Accessibility permission before a global hotkey fires outside Ghostty.
