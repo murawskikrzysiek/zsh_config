@@ -48,6 +48,25 @@ keybind = alt+delete=text:\x1bd
 # Uncomment to get Meta on the right Option only, diacritics intact on the left:
 # macos-option-as-alt = right
 
+# ── Splits ───────────────────────────────────────────────────────────────────
+# Built in, nothing to configure — listed here because these are the bindings
+# iTerm2 muscle memory already expects. Check them against your build with:
+#   ghostty +list-keybinds --default
+#
+#   cmd+d              split right (panes side by side, iTerm2's "vertical")
+#   cmd+shift+d        split down (panes stacked, iTerm2's "horizontal")
+#   cmd+alt+arrows     move focus between splits
+#   cmd+[ / cmd+]      focus previous / next split
+#   cmd+shift+enter    zoom the focused split to fill the window, and back
+#   cmd+ctrl+arrows    resize the focused split
+#   cmd+w              close the focused split
+#
+# The cmd+arrow bindings above (start/end of line) do not collide: split
+# navigation lives on cmd+alt, resizing on cmd+ctrl.
+#
+# Ghostty has no equivalent of iTerm2's "send input to all panes" and no saved
+# window arrangements; tmux covers both if you need them.
+
 # ── Clipboard and safety ─────────────────────────────────────────────────────
 # These match Ghostty's current defaults; pinned explicitly so a future change
 # of defaults cannot loosen them quietly. `ask` means a program reading the
