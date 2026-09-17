@@ -1,9 +1,13 @@
 # zsh_config
 
 Frameworkless zsh setup: Powerlevel10k prompt, autosuggestions, syntax
-highlighting, zoxide, atuin, fzf, uv-aware venv auto-activation, and a
-versioned iTerm2 profile. No Oh My Zsh, no Starship; every line is in this
-repo.
+highlighting, zoxide, atuin, fzf, uv-aware venv auto-activation, and versioned
+terminal profiles for Ghostty and iTerm2. No Oh My Zsh, no Starship; every line
+is in this repo.
+
+The shell config is terminal-agnostic — only colors, font and the key
+sequences behind Option/Cmd editing are per terminal, and those live in
+`ghostty/` and `iterm/`, generated from one palette file.
 
 ## Layout
 
@@ -18,6 +22,8 @@ zsh/keybindings.zsh word granularity, Ctrl+Z toggle, line editing
 zsh/python.zsh      .venv auto-activate/deactivate on cd
 zsh/prompt.zsh      p10k + plugins + theme switch (keep last)
 themes/             prompt color schemes (headroom, gruvbox, ...)
+palettes.py         terminal color palettes, shared by both generators
+ghostty/            Ghostty config + themes + generator (default terminal)
 iterm/              iTerm2 color presets + dynamic profile + generator
 Brewfile            all dependencies
 install.sh          bootstrap a machine
@@ -39,13 +45,15 @@ The installer:
 - backs up any existing `~/.zshrc` to `~/.zshrc.backup-<timestamp>` and
   symlinks `~/.zshrc` into the repo
 - creates `~/.zprofile` with Homebrew shellenv if missing
-- installs the "Headroom" iTerm2 dynamic profile (colors, JetBrains Mono NF,
-  option/cmd key mappings)
+- symlinks `~/.config/ghostty/config` and the themes into the repo
+- installs the "Headroom" iTerm2 dynamic profile, but only if iTerm2 is
+  actually installed on the machine
 - prints the `export` / `alias` / `eval` / `source` lines found in the
   replaced `.zshrc` so nothing silently disappears
 
-Then in iTerm2: Settings, Profiles, select **Headroom**, Other Actions,
-**Set as Default Profile**.
+Ghostty needs nothing else: colors, font and key bindings come from the
+config file. In iTerm2 one manual step remains — Settings, Profiles, select
+**Headroom**, Other Actions, **Set as Default Profile**.
 
 ### Migrating the old config
 
@@ -80,13 +88,62 @@ git config user.email "USERNAME@users.noreply.github.com"
 string = p10k defaults). Themes also restyle eza and the autosuggestion
 ghost text where it matters.
 
-Each theme pairs with an iTerm2 palette. The headroom one ships as the
-dynamic profile; the others as `.itermcolors` presets:
-`open iterm/<name>.itermcolors`, then select it under Settings, Profiles,
-Colors, Color Presets. Palettes live in `iterm/make_itermcolors.py`; rerun
-it after editing (it also regenerates the dynamic profile, which embeds the
-key mappings from `iterm/keyboard-map.json`). Keep Minimum Contrast at 0 or
-iTerm2 distorts the tuned colors.
+Each prompt theme pairs with a terminal palette. Both sets are generated
+from `palettes.py`:
+
+```
+python3 ghostty/make_ghostty.py      # -> ghostty/themes/<name>
+python3 iterm/make_itermcolors.py    # -> iterm/<name>.itermcolors + profile
+```
+
+In Ghostty, switch with `theme = <name>` in `ghostty/config`; `catppuccin-mocha`
+and `nord` are built in (`ghostty +list-themes`), so only headroom and gruvbox
+need generating. In iTerm2, `open iterm/<name>.itermcolors`, then select it
+under Settings, Profiles, Colors, Color Presets — and keep Minimum Contrast at
+0 or iTerm2 distorts the tuned colors. The iTerm2 generator also rebuilds the
+dynamic profile, which embeds the key mappings from `iterm/keyboard-map.json`.
+
+## Terminals
+
+`ghostty/config` is the supported setup; `iterm/` is kept for machines where
+iTerm2 is still in use. Ghostty was picked as the default because it has no
+plugin or scripting runtime, no built-in AI/LLM integration, and no telemetry —
+a small attack surface is the easiest thing to defend in a security review.
+
+What the per-terminal files have to provide, whatever the terminal:
+
+- the 16 ANSI colors plus background/foreground/cursor/selection, true color
+- a Nerd Font, or `p10k`'s glyphs render as boxes
+- Option+arrows → `ESC b` / `ESC f`, Cmd+arrows → `^A` / `^E`,
+  Cmd+Backspace → `^U`, Option+Backspace → `ESC DEL`, Fn+Delete → `^D`,
+  Option+Fn+Delete → `ESC d` — this is what `zsh/keybindings.zsh` reacts to
+
+Ghostty specifics worth knowing:
+
+- it advertises `TERM=xterm-ghostty`, which servers don't know; `clear`, tmux
+  and TUIs then break over ssh. Fix with `shell-integration-features =
+  ssh-env,ssh-terminfo` (Ghostty 1.1+) or `term = xterm-256color`. Both are in
+  the config, commented.
+- `macos-option-as-alt` is deliberately left off: it would turn Option into
+  Meta everywhere and kill Option+a / Option+l for ą, ł and friends. The
+  explicit `keybind` lines cover the editing keys instead.
+- reload after an edit with Cmd+Shift+, ; validate with `ghostty +validate-config`
+
+### If Ghostty is not approved either
+
+The shell config runs unchanged on any of these; only the profile files differ.
+
+| Terminal | Notes for a security review |
+|---|---|
+| **Apple Terminal.app** | Preinstalled and already approved everywhere. No true color (themes fall back to 256 colors), no ligatures, slower redraw. The safest fallback. |
+| **WezTerm** | Rust, cross-platform, actively maintained. Config is a Lua program, which is itself a scripting surface some reviews object to. |
+| **Alacritty** | Rust, minimal, YAML/TOML config, no tabs or splits — pair it with tmux. Smallest feature surface of the lot. |
+| **kitty** | Fast and featureful, but "kittens" are Python scripts, so it carries a scripting runtime. |
+| **VS Code / JetBrains terminal** | If the IDE is already approved, its terminal usually is too. Set the font and paste this repo's ANSI palette into its settings. |
+
+Whatever gets approved: keep `zsh/`, `themes/` and `p10k.zsh`, add one
+directory for the new terminal's profile, generate its palette from
+`palettes.py`.
 
 ## Try without touching the live shell
 
@@ -98,7 +155,10 @@ ZDOTDIR=~/dev/zsh_config zsh
 
 - Prompt look beyond colors is tuned with `p10k configure` (writes
   `~/.p10k.zsh`; copy it over `p10k.zsh` here to persist).
-- atuin owns Ctrl+R; fzf owns Ctrl+T (files) and Alt+C (cd).
+- atuin owns Ctrl+R; fzf owns Ctrl+T (files) and Alt+C (cd). Alt+C needs the
+  terminal to send Meta on Option — in Ghostty that means
+  `macos-option-as-alt`, at the cost of Option+letter diacritics; Esc then C
+  works without it.
 - `cd` into a project with `.venv` activates it; leaving deactivates.
 - Ctrl+Z on an empty line resumes the last suspended job; on a non-empty
   line it stashes the input and restores it after the next command.

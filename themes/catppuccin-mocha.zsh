@@ -1,6 +1,7 @@
 # Catppuccin Mocha prompt colors. Sourced after p10k.zsh; overrides its colors.
 # Palette: https://catppuccin.com/palette
-# Pairs best with an iTerm2 background of #1e1e2e.
+# Pairs best with a terminal background of #1e1e2e: Ghostty ships a
+# catppuccin-mocha theme built in (theme = catppuccin-mocha).
 
 typeset -g POWERLEVEL9K_BACKGROUND='#313244'
 typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR='%F{#6c7086}'

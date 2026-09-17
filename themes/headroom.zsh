@@ -2,7 +2,8 @@
 # Derived from headroom/DESIGN-SYSTEM.md: card surfaces as layered segment
 # blocks, periwinkle #7c84f6 as the single accent, text tiers for structure,
 # color only where it carries meaning (modified files, errors).
-# Pairs with the headroom-dark iTerm2 preset (background #0b0b0f).
+# Pairs with the headroom-dark terminal theme (background #0b0b0f):
+# ghostty/themes/headroom-dark, iterm/headroom-dark.itermcolors.
 
 # Segment surfaces: border tones, one step brighter than the card tones so
 # the bar reads as a bar against the #0b0b0f terminal background.

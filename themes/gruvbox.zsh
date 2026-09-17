@@ -1,6 +1,7 @@
 # Gruvbox (dark) prompt colors. Sourced after p10k.zsh; overrides its colors.
 # Palette: https://github.com/morhetz/gruvbox
-# Pairs best with an iTerm2 background of #282828.
+# Pairs best with a terminal background of #282828: the gruvbox-dark theme
+# in ghostty/themes/ or iterm/.
 
 typeset -g POWERLEVEL9K_BACKGROUND='#3c3836'
 typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR='%F{#7c6f64}'

@@ -1,6 +1,7 @@
 # Nord prompt colors. Sourced after p10k.zsh; overrides its colors.
 # Palette: https://www.nordtheme.com/docs/colors-and-palettes
-# Pairs best with an iTerm2 background of #2e3440.
+# Pairs best with a terminal background of #2e3440: Ghostty ships a nord
+# theme built in (theme = nord).
 
 typeset -g POWERLEVEL9K_BACKGROUND='#3b4252'
 typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR='%F{#616e88}'

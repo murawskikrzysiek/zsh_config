@@ -1,6 +1,7 @@
 # Line-editor keybindings. The byte sequences these react to are produced by
-# the iTerm2 key mappings in iterm/headroom.profile.json (option/cmd + arrows
-# and delete send readline-style sequences).
+# the terminal: `keybind` lines in ghostty/config, or the iTerm2 key mappings
+# in iterm/headroom.profile.json. Both send the same readline-style sequences
+# for option/cmd + arrows and delete, so this file is terminal-agnostic.
 
 # ── Word granularity ──────────────────────────────────────────────────────────
 # bash-style words: only alphanumerics. Option+arrow / option+delete stop at

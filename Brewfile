@@ -19,6 +19,11 @@ brew "ripgrep"
 # Python
 brew "uv"
 
-# The font the Headroom iTerm2 profile pins (JetBrainsMonoNFM-Regular).
+# Terminal. The config in ghostty/ is installed by install.sh; iTerm2 is
+# still supported (iterm/) but not installed from here.
+cask "ghostty"
+
+# The font the terminal profiles pin: "JetBrainsMono Nerd Font Mono" in
+# Ghostty, JetBrainsMonoNFM-Regular in iTerm2 — same family.
 # Also the design system's --font-mono.
 cask "font-jetbrains-mono-nerd-font"

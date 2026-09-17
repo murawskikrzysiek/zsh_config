@@ -33,15 +33,41 @@ if [[ ! -e "$HOME/.zprofile" ]]; then
   printf '\neval "$(/opt/homebrew/bin/brew shellenv)"\n' > "$HOME/.zprofile"
 fi
 
+# ── Ghostty ──────────────────────────────────────────────────────────────────
+# Ghostty reads ~/.config/ghostty/config on launch and on reload. Symlinked, so
+# a git pull updates the live config.
+GHOSTTY_DIR="$HOME/.config/ghostty"
+echo "==> Installing Ghostty config -> $GHOSTTY_DIR"
+mkdir -p "$GHOSTTY_DIR/themes"
+if [[ -e "$GHOSTTY_DIR/config" && ! -L "$GHOSTTY_DIR/config" ]]; then
+  echo "    Backing up existing config to config.backup-$TS"
+  mv "$GHOSTTY_DIR/config" "$GHOSTTY_DIR/config.backup-$TS"
+fi
+ln -sfn "$REPO_DIR/ghostty/config" "$GHOSTTY_DIR/config"
+for theme in "$REPO_DIR"/ghostty/themes/*; do
+  ln -sfn "$theme" "$GHOSTTY_DIR/themes/$(basename "$theme")"
+done
+
+# ── iTerm2 (only if it is actually installed) ────────────────────────────────
 # iTerm2 reads this directory on launch, so installing before its first run
 # is fine.
-DP_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
-echo "==> Installing iTerm2 'Headroom' dynamic profile"
-mkdir -p "$DP_DIR"
-cp "$REPO_DIR/iterm/headroom.profile.json" "$DP_DIR/"
+ITERM_INSTALLED=false
+if [[ -d "/Applications/iTerm.app" || -d "$HOME/Applications/iTerm.app" ]]; then
+  ITERM_INSTALLED=true
+  DP_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+  echo "==> Installing iTerm2 'Headroom' dynamic profile"
+  mkdir -p "$DP_DIR"
+  cp "$REPO_DIR/iterm/headroom.profile.json" "$DP_DIR/"
+else
+  echo "==> iTerm2 not installed, skipping its profile"
+fi
 
 echo "==> Done. Remaining manual steps:"
-echo "    1. Restart iTerm2 (or open a new tab) and run: exec zsh"
-echo "    2. iTerm2 Settings > Profiles > Headroom > Other Actions >"
-echo "       Set as Default Profile — this applies the Nerd Font and colors."
-echo "       Without it, prompt glyphs render as boxes."
+echo "    1. Restart the terminal (or open a new tab) and run: exec zsh"
+echo "       Ghostty picks up colors, font and key bindings from the config"
+echo "       above; nothing to click."
+if [[ "$ITERM_INSTALLED" == true ]]; then
+  echo "    2. iTerm2 only: Settings > Profiles > Headroom > Other Actions >"
+  echo "       Set as Default Profile — this applies the Nerd Font and colors."
+  echo "       Without it, prompt glyphs render as boxes."
+fi

@@ -1,0 +1,76 @@
+# Ghostty configuration for this zsh setup.
+# install.sh symlinks this file to ~/.config/ghostty/config, so edits here are
+# live after a reload (Cmd+Shift+, ) or a restart.
+#
+# Syntax is `key = value`, one per line; comments need their own line, a `#`
+# after a value becomes part of the value. Every option with its default and
+# documentation: ghostty +show-config --default --docs
+
+# ── Appearance ───────────────────────────────────────────────────────────────
+# Themes come from ghostty/themes/, generated out of palettes.py by
+# ghostty/make_ghostty.py: headroom-dark (default), gruvbox-dark.
+# Ghostty also ships catppuccin-mocha and nord as built-ins, which pair with
+# the prompt themes of the same name — list them with: ghostty +list-themes
+theme = headroom-dark
+
+# The Nerd Font the prompt glyphs need (Brewfile installs it). The "Mono"
+# variant keeps icon advance widths fixed, same choice as the iTerm2 profile.
+font-family = "JetBrainsMono Nerd Font Mono"
+font-size = 12
+
+window-padding-x = 8
+window-padding-y = 6
+window-save-state = always
+macos-titlebar-style = tabs
+mouse-hide-while-typing = true
+
+# ── Keys ─────────────────────────────────────────────────────────────────────
+# The byte sequences zsh/keybindings.zsh expects, identical to what the iTerm2
+# profile sent (iterm/keyboard-map.json).
+#
+# Option+arrows: move one bash-style word (ESC b / ESC f)
+keybind = alt+left=text:\x1bb
+keybind = alt+right=text:\x1bf
+# Cmd+arrows: start / end of line (^A / ^E)
+keybind = cmd+left=text:\x01
+keybind = cmd+right=text:\x05
+# Cmd+Backspace: delete to start of line (^U, bound to backward-kill-line)
+keybind = cmd+backspace=text:\x15
+# Option+Backspace: delete the previous word (ESC DEL)
+keybind = alt+backspace=text:\x1b\x7f
+# Fn+Delete: delete the character ahead (^D); with Option, the word ahead
+keybind = delete=text:\x04
+keybind = alt+delete=text:\x1bd
+
+# macos-option-as-alt stays off deliberately: turning it on makes Option a
+# Meta key for every key, which kills Option+a / Option+l for ą, ł and the
+# rest of the Polish layout. The bindings above cover the keys that matter.
+# Uncomment to get Meta on the right Option only, diacritics intact on the left:
+# macos-option-as-alt = right
+
+# ── Clipboard and safety ─────────────────────────────────────────────────────
+# These match Ghostty's current defaults; pinned explicitly so a future change
+# of defaults cannot loosen them quietly. `ask` means a program reading the
+# clipboard via OSC 52 needs a confirmation; paste protection warns before
+# pasting text containing newlines or control characters.
+clipboard-read = ask
+clipboard-write = allow
+clipboard-paste-protection = true
+# iTerm2-style: selecting text puts it on the system clipboard.
+copy-on-select = clipboard
+
+# ── Shell integration ────────────────────────────────────────────────────────
+# Ghostty injects its zsh integration ahead of ~/.zshrc (cwd reporting, jump
+# between prompts, working-directory inheritance in new tabs). It prints
+# nothing, so p10k's instant prompt is unaffected. Set to `none` if it ever
+# fights the prompt.
+shell-integration = zsh
+
+# Ghostty advertises TERM=xterm-ghostty. Hosts that lack that terminfo entry —
+# most servers — then break `clear`, tmux and full-screen TUIs over ssh.
+# Ghostty 1.1+ can install its terminfo on the remote automatically:
+#   shell-integration-features = ssh-env,ssh-terminfo
+# Check whether this build has it:
+#   ghostty +show-config --default --docs | grep -A2 ssh-terminfo
+# Blunt fallback that works with any build and any host:
+#   term = xterm-256color
