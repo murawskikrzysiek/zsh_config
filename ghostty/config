@@ -67,6 +67,24 @@ keybind = alt+delete=text:\x1bd
 # Ghostty has no equivalent of iTerm2's "send input to all panes" and no saved
 # window arrangements; tmux covers both if you need them.
 
+# ── Quick terminal (iTerm2's hotkey window) ──────────────────────────────────
+# One global hotkey from anywhere in macOS: the terminal slides in over the
+# app in front, a second press hides it and focus goes back to that app.
+# `global:` means the binding works while Ghostty is not the active app;
+# macOS may ask for Accessibility permission the first time — without it the
+# hotkey only fires inside Ghostty.
+#
+# Cmd+grave mirrors the iTerm2 default. It shadows macOS's "cycle windows of
+# the active app" while Ghostty is focused, so swap it if that matters, e.g.
+# global:alt+space or global:ctrl+grave.
+keybind = global:cmd+grave=toggle_quick_terminal
+
+# Slides down from the top edge, on the screen the pointer is on, and hides
+# itself as soon as focus moves elsewhere — click away and it is gone.
+quick-terminal-position = top
+quick-terminal-screen = mouse
+quick-terminal-autohide = true
+
 # ── Clipboard and safety ─────────────────────────────────────────────────────
 # These match Ghostty's current defaults; pinned explicitly so a future change
 # of defaults cannot loosen them quietly. `ask` means a program reading the
