@@ -24,6 +24,7 @@ zsh/prompt.zsh      p10k + plugins + theme switch (keep last)
 themes/             prompt color schemes (headroom, gruvbox, ...)
 palettes.py         terminal color palettes, shared by both generators
 ghostty/            Ghostty config + themes + generator (default terminal)
+terminal-app/       Apple Terminal.app profile + generator
 iterm/              iTerm2 color presets + dynamic profile + generator
 Brewfile            all dependencies
 install.sh          bootstrap a machine
@@ -144,7 +145,9 @@ What the per-terminal files have to provide, whatever the terminal:
 - a Nerd Font, or `p10k`'s glyphs render as boxes
 - Option+arrows → `ESC b` / `ESC f`, Cmd+arrows → `^A` / `^E`,
   Cmd+Backspace → `^U`, Option+Backspace → `ESC DEL`, Fn+Delete → `^D`,
-  Option+Fn+Delete → `ESC d` — this is what `zsh/keybindings.zsh` reacts to
+  Option+Fn+Delete → `ESC d` — this is what `zsh/keybindings.zsh` reacts to.
+  It also binds the xterm-style forms (`ESC [1;3D` and friends) and Home/End,
+  so word motion survives a terminal whose keys cannot be remapped at all
 
 Ghostty specifics worth knowing:
 
@@ -163,13 +166,41 @@ Ghostty specifics worth knowing:
   rather than your real windows.
 - reload after an edit with Cmd+Shift+, ; validate with `ghostty +validate-config`
 
+### Apple Terminal.app
+
+The fallback that needs no approval. Until macOS 26 (Tahoe) it was a poor one:
+256 colors and broken Powerline glyphs. Tahoe added 24-bit color and Powerline
+font rendering, so `themes/headroom.zsh` and the p10k prompt render as intended
+— no separate low-color theme needed.
+
+```
+python3 terminal-app/make_terminal.py   # regenerate after a palette change
+open terminal-app/headroom.terminal     # imports the profile
+```
+
+Then Terminal, Settings, Profiles, select **Headroom**, **Default**. The
+profile carries the palette, JetBrains Mono NF at 12pt, and leaves Option as a
+normal modifier so Option+a still types ą.
+
+What you give up, and the workaround:
+
+- **No split panes.** Terminal.app has tabs and windows only. `tmux` is the
+  answer; inside it, set the terminal-overrides for RGB or tmux strips the
+  24-bit colors back to 256 and the theme looks wrong again.
+- **Cmd is not remappable.** Terminal's keyboard map refuses Command entirely,
+  so the Cmd+arrow / Cmd+Backspace line editing from the other profiles cannot
+  be reproduced. `Ctrl+A` / `Ctrl+E` / `Ctrl+U` do the same jobs, and
+  `zsh/keybindings.zsh` binds Home/End (fn+arrows) as well.
+- Option+arrow word motion works through the sequences `zsh/keybindings.zsh`
+  binds directly, so nothing has to be mapped in the profile.
+
 ### If Ghostty is not approved either
 
 The shell config runs unchanged on any of these; only the profile files differ.
 
 | Terminal | Notes for a security review |
 |---|---|
-| **Apple Terminal.app** | Preinstalled and already approved everywhere. No true color (themes fall back to 256 colors), no ligatures, slower redraw. The safest fallback. |
+| **Apple Terminal.app** | Preinstalled and approved everywhere, and since macOS 26 (Tahoe) it does 24-bit color and Powerline glyphs, so this config looks right in it. No split panes — that is what you give up. See below. |
 | **WezTerm** | Rust, cross-platform, actively maintained. Config is a Lua program, which is itself a scripting surface some reviews object to. |
 | **Alacritty** | Rust, minimal, YAML/TOML config, no tabs or splits — pair it with tmux. Smallest feature surface of the lot. |
 | **kitty** | Fast and featureful, but "kittens" are Python scripts, so it carries a scripting runtime. |
