@@ -137,6 +137,11 @@ if [[ "$WANT_TERMINAL_APP" == 1 ]]; then
   else
     echo "    No 'open' here; import it by hand: $PROFILE"
   fi
+  # Ctrl+Shift+T opens the window group named "dev" (Window > Open Window
+  # Group > dev). A menu shortcut, so it works once a group of that name has
+  # been saved; Terminal reads it at its next launch. ^ Control, $ Shift.
+  echo "==> Binding Ctrl+Shift+T to the 'dev' window group"
+  defaults write com.apple.Terminal NSUserKeyEquivalents -dict-add "dev" '^$t'
 fi
 
 # ── What is left to do by hand ───────────────────────────────────────────────
@@ -152,6 +157,8 @@ if [[ "$WANT_ITERM" == 1 ]]; then
 fi
 if [[ "$WANT_TERMINAL_APP" == 1 ]]; then
   echo "    Terminal.app: Settings > Profiles > Headroom > Default."
+  echo "      Arrange your windows, Window > Save Windows as Group..., name it"
+  echo "      'dev'; after the next Terminal launch Ctrl+Shift+T reopens it."
 fi
 if [[ "$WANT_TMUX" == 1 ]]; then
   echo "    tmux: prefix stays Ctrl+B. Split with prefix | and prefix -,"

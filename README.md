@@ -204,6 +204,19 @@ Option+arrows already send `ESC b` / `ESC f` out of the box, so they are not
 in it. It shows up under the profile's Keyboard tab after the import; nothing
 to click there.
 
+Window groups are Terminal's saved layouts: arrange the windows, Window,
+Save Windows as Group..., and it remembers each one's profile, size and
+position. The installer binds `Ctrl+Shift+T` to a group named **dev**:
+
+```
+defaults write com.apple.Terminal NSUserKeyEquivalents -dict-add "dev" '^$t'
+```
+
+The shortcut is a menu key equivalent, so it needs a group of that exact name
+and takes effect at Terminal's next launch. Settings, General, "On startup:
+open window group" restores it without any key. A group reopens windows, not
+what ran in them; with tmux auto-start each window attaches to `main` again.
+
 What you give up, and the workaround:
 
 - **No split panes in the iTerm2 sense.** `Cmd+D` does exist and splits the
