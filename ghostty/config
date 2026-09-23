@@ -66,6 +66,16 @@ keybind = alt+delete=text:\x1bd
 #
 # Ghostty has no equivalent of iTerm2's "send input to all panes" and no saved
 # window arrangements; tmux covers both if you need them.
+#
+# Running tmux inside Ghostty? Then Ghostty's splits and tmux's panes compete
+# for the same screen, and only tmux's survive a closed window. To hand the
+# keys to tmux, send it the prefix (Ctrl+B = \x02) followed by the split key
+# from tmux/tmux.conf — same fingers, tmux panes:
+# keybind = cmd+d=text:\x02|
+# keybind = cmd+shift+d=text:\x02-
+#
+# Apple's Terminal.app cannot do this: its keyboard map refuses Command
+# outright, so there Cmd+D stays its own same-session view splitter.
 
 # ── Global show/hide hotkey ──────────────────────────────────────────────────
 # Cmd + the key left of "1" brings, from any app, the Ghostty windows you
