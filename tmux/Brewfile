@@ -1,0 +1,5 @@
+# tmux itself, installed only on request:
+#
+#   ./install.sh tmux
+#
+brew "tmux"

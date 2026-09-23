@@ -25,6 +25,7 @@ themes/             prompt color schemes (headroom, gruvbox, ...)
 palettes.py         terminal color palettes, shared by both generators
 ghostty/            Ghostty config + themes + generator (default terminal)
 terminal-app/       Apple Terminal.app profile + generator
+tmux/               tmux config + theme + generator (real panes anywhere)
 iterm/              iTerm2 color presets + dynamic profile + generator
 Brewfile            shell dependencies (tools, plugins, font)
 install.sh          bootstrap a machine; terminals are opt-in arguments
@@ -49,12 +50,14 @@ it:
 ./install.sh ghostty                + Ghostty: its cask, config and themes
 ./install.sh terminal-app           + import the Terminal.app profile
 ./install.sh iterm                  + the iTerm2 dynamic profile
-./install.sh ghostty terminal-app   combine freely
+./install.sh tmux                   + tmux: the binary, config and theme
+./install.sh ghostty tmux           combine freely
 ```
 
 Which terminal is allowed differs per machine, so nothing is assumed. Each
-directory is self-contained: `ghostty/`, `iterm/` and `terminal-app/` never
-reference one another, and the shell config works the same under all three.
+directory is self-contained: `ghostty/`, `iterm/`, `terminal-app/` and `tmux/`
+never reference one another, and the shell config works the same under all of
+them.
 
 The shell part always: installs the Brewfile dependencies (tools, plugins,
 font), backs up an existing `~/.zshrc` to `~/.zshrc.backup-<timestamp>`,
@@ -195,10 +198,9 @@ What you give up, and the workaround:
 - **No split panes in the iTerm2 sense.** `Cmd+D` does exist and splits the
   window, but both halves show the *same* session with independent scroll
   positions — handy for keeping earlier output in view, useless for running
-  two things side by side. For that: `tmux`, or macOS window tiling (two
-  Terminal windows snapped side by side, `fn+ctrl+arrows`). Inside tmux, set
-  the terminal-overrides for RGB or it strips the 24-bit colors back to 256
-  and the theme looks wrong again.
+  two things side by side. For that: `tmux` (see below — `./install.sh tmux`
+  ships a config with the truecolor passthrough already set), or macOS window
+  tiling, two Terminal windows snapped side by side with `fn+ctrl+arrows`.
 - **Cmd is not remappable.** Terminal's keyboard map refuses Command entirely,
   so the Cmd+arrow / Cmd+Backspace line editing from the other profiles cannot
   be reproduced. `Ctrl+A` / `Ctrl+E` / `Ctrl+U` do the same jobs, and
@@ -221,6 +223,42 @@ The shell config runs unchanged on any of these; only the profile files differ.
 Whatever gets approved: keep `zsh/`, `themes/` and `p10k.zsh`, add one
 directory for the new terminal's profile, generate its palette from
 `palettes.py`.
+
+## tmux
+
+Real panes, in any terminal, plus sessions that outlive a closed window or a
+dropped ssh. Worth it under Terminal.app in particular, whose `Cmd+D` splits
+only the view of one session.
+
+```
+./install.sh tmux
+```
+
+Symlinks `~/.config/tmux/tmux.conf` and the generated theme next to it.
+Regenerate the colors after a palette change with
+`python3 tmux/make_tmux.py`.
+
+| | |
+|---|---|
+| `prefix \|` / `prefix -` | split right / down, keeping the directory |
+| `prefix` + arrows | move between panes (repeatable) |
+| `prefix` + shift-arrows | resize (repeatable) |
+| `prefix c` | new window, keeping the directory |
+| `prefix R` | reload the config |
+
+The prefix stays the default `Ctrl+B`. The popular `Ctrl+A` swap is left
+commented out on purpose: it collides with beginning-of-line, and under
+Terminal.app — which cannot map Command at all — `Ctrl+A` is the only way to
+reach the start of a line.
+
+Two settings carry the weight. `terminal-features *:RGB` stops tmux
+quantizing the 24-bit palette back to 256 colors, which is what makes the
+headroom theme survive inside tmux. `escape-time 10` keeps ESC-prefixed
+sequences intact — the same ones `zsh/keybindings.zsh` binds for word motion —
+where the 500ms default swallows them.
+
+Mouse mode is on: click to focus, drag borders to resize, scroll into the
+history, and a selection goes straight to the Mac clipboard.
 
 ## Try without touching the live shell
 

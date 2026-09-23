@@ -9,7 +9,8 @@
 #   ./install.sh ghostty                + Ghostty: its cask, config and themes
 #   ./install.sh terminal-app           + import the Apple Terminal.app profile
 #   ./install.sh iterm                  + the iTerm2 dynamic profile
-#   ./install.sh ghostty terminal-app   combine freely
+#   ./install.sh tmux                   + tmux: the binary, config and theme
+#   ./install.sh ghostty tmux           combine freely
 #
 # SKIP_BREW=1 skips Homebrew entirely — for locked-down machines where IT owns
 # the software list, or for a config-only refresh.
@@ -28,11 +29,13 @@ usage() {
 WANT_GHOSTTY=0
 WANT_ITERM=0
 WANT_TERMINAL_APP=0
+WANT_TMUX=0
 for arg in "$@"; do
   case "$arg" in
     ghostty)                 WANT_GHOSTTY=1 ;;
     iterm|iterm2)            WANT_ITERM=1 ;;
     terminal-app|terminal)   WANT_TERMINAL_APP=1 ;;
+    tmux)                    WANT_TMUX=1 ;;
     -h|--help)               usage; exit 0 ;;
     *)
       echo "install.sh: unknown argument '$arg'" >&2
@@ -55,6 +58,10 @@ else
   if [[ "$WANT_GHOSTTY" == 1 ]]; then
     echo "==> Installing Ghostty (ghostty/Brewfile)"
     brew bundle --file="$REPO_DIR/ghostty/Brewfile"
+  fi
+  if [[ "$WANT_TMUX" == 1 ]]; then
+    echo "==> Installing tmux (tmux/Brewfile)"
+    brew bundle --file="$REPO_DIR/tmux/Brewfile"
   fi
 fi
 
@@ -104,6 +111,24 @@ if [[ "$WANT_ITERM" == 1 ]]; then
   cp "$REPO_DIR/iterm/headroom.profile.json" "$DP_DIR/"
 fi
 
+if [[ "$WANT_TMUX" == 1 ]]; then
+  # tmux 3.1 and newer read ~/.config/tmux/tmux.conf. Symlinked, so a git pull
+  # updates the live config; the theme sits beside it because tmux.conf
+  # sources it by that path.
+  TMUX_DIR="$HOME/.config/tmux"
+  echo "==> Installing tmux config -> $TMUX_DIR"
+  mkdir -p "$TMUX_DIR"
+  if [[ -e "$TMUX_DIR/tmux.conf" && ! -L "$TMUX_DIR/tmux.conf" ]]; then
+    echo "    Backing up existing tmux.conf to tmux.conf.backup-$TS"
+    mv "$TMUX_DIR/tmux.conf" "$TMUX_DIR/tmux.conf.backup-$TS"
+  fi
+  if [[ -e "$HOME/.tmux.conf" && ! -L "$HOME/.tmux.conf" ]]; then
+    echo "    Note: ~/.tmux.conf also exists and wins on tmux older than 3.1"
+  fi
+  ln -sfn "$REPO_DIR/tmux/tmux.conf" "$TMUX_DIR/tmux.conf"
+  ln -sfn "$REPO_DIR/tmux/headroom.tmux" "$TMUX_DIR/headroom.tmux"
+fi
+
 if [[ "$WANT_TERMINAL_APP" == 1 ]]; then
   PROFILE="$REPO_DIR/terminal-app/headroom.terminal"
   echo "==> Importing the Terminal.app 'Headroom' profile"
@@ -128,7 +153,11 @@ fi
 if [[ "$WANT_TERMINAL_APP" == 1 ]]; then
   echo "    Terminal.app: Settings > Profiles > Headroom > Default."
 fi
-if (( WANT_GHOSTTY + WANT_ITERM + WANT_TERMINAL_APP == 0 )); then
-  echo "    No terminal profile was installed. Add one whenever you want:"
-  echo "      ./install.sh ghostty | terminal-app | iterm"
+if [[ "$WANT_TMUX" == 1 ]]; then
+  echo "    tmux: prefix stays Ctrl+B. Split with prefix | and prefix -,"
+  echo "      move between panes with prefix + arrows."
+fi
+if (( WANT_GHOSTTY + WANT_ITERM + WANT_TERMINAL_APP + WANT_TMUX == 0 )); then
+  echo "    Nothing terminal-side was installed. Add what you need, anytime:"
+  echo "      ./install.sh ghostty | terminal-app | iterm | tmux"
 fi
