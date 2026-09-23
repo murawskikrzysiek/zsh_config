@@ -76,8 +76,48 @@ def archived_font(name, size):
 # parser takes them). plistlib refuses to write those, so they travel through
 # the dump as private-use stand-ins and are swapped back below.
 #
-# Not mapped, because Terminal's default map already sends it:
-#   Option+Left / Right -> ESC b / ESC f  ("~F702" / "~F703")
+# A profile's key map REPLACES the default map, it does not overlay it.
+# Measured on macOS 26: with only the four entries below in the profile, F5
+# sent nothing and Ctrl+Left / Shift+Left sent a plain arrow. So Apple's
+# defaults are carried here verbatim and ours are laid on top.
+
+# Terminal.app's Resources/keyMappings.plist, macOS 26, unchanged.
+DEFAULT_MAP = [
+    ("F704", b"\x1bOP"), ("F705", b"\x1bOQ"),          # F1 .. F4
+    ("F706", b"\x1bOR"), ("F707", b"\x1bOS"),
+    ("F708", b"\x1b[15~"), ("F709", b"\x1b[17~"),      # F5 .. F12
+    ("F70A", b"\x1b[18~"), ("F70B", b"\x1b[19~"),
+    ("F70C", b"\x1b[20~"), ("F70D", b"\x1b[21~"),
+    ("F70E", b"\x1b[23~"), ("F70F", b"\x1b[24~"),
+    ("F710", b"\x1b[25~"), ("F711", b"\x1b[26~"),      # F13 .. F20
+    ("F712", b"\x1b[28~"), ("F713", b"\x1b[29~"),
+    ("F714", b"\x1b[31~"), ("F715", b"\x1b[32~"),
+    ("F716", b"\x1b[33~"), ("F717", b"\x1b[34~"),
+    ("F728", b"\x1b[3~"),                              # fn+Delete
+    ("$F702", b"\x1b[1;2D"), ("$F703", b"\x1b[1;2C"),  # Shift+arrows
+    ("$F708", b"\x1b[25~"), ("$F709", b"\x1b[26~"),    # Shift+F5 ..
+    ("$F70A", b"\x1b[28~"), ("$F70B", b"\x1b[29~"),
+    ("$F70C", b"\x1b[31~"), ("$F70D", b"\x1b[32~"),
+    ("$F70E", b"\x1b[33~"), ("$F70F", b"\x1b[34~"),
+    ("$F728", b"\x1b[3;2~"),
+    ("^F702", b"\x1b[1;5D"), ("^F703", b"\x1b[1;5C"),  # Ctrl+arrows
+    ("^F728", b"\x1b[3;5~"),
+    ("~F702", b"\x1bb"), ("~F703", b"\x1bf"),          # Option+arrows
+    ("~F704", b"\x1b[17~"), ("~F705", b"\x1b[18~"),    # Option+F1 ..
+    ("~F706", b"\x1b[19~"), ("~F707", b"\x1b[20~"),
+    ("~F708", b"\x1b[21~"), ("~F709", b"\x1b[23~"),
+    ("~F70A", b"\x1b[24~"), ("~F70B", b"\x1b[25~"),
+    ("~F70C", b"\x1b[26~"), ("~F70D", b"\x1b[28~"),
+    ("~F70E", b"\x1b[29~"), ("~F70F", b"\x1b[31~"),
+    ("~F710", b"\x1b[32~"), ("~F711", b"\x1b[33~"),
+    ("~F712", b"\x1b[34~"),
+    ("~^F728", b"\x1b\x1b[3;5~"),
+    ("#F704", b"\x1bOP"), ("#F705", b"\x1bOQ"),        # keypad
+    ("#F706", b"\x1bOR"), ("#F707", b"\x1bOS"),
+    ("#F739", b"toggleNumLock:"),
+]
+
+# Ours, on top. Option+arrows are already ESC b / ESC f in the defaults.
 KEY_MAP = [
     ("~007F", b"\x1b\x7f"),  # Option+Backspace: delete the previous word
     ("^007F", b"\x08"),      # Ctrl+Backspace: delete the whole line (^H)
@@ -119,7 +159,8 @@ profile = {
     # Option stays a normal modifier, so Option+a still types ą. The keys
     # that need Meta-style sequences are mapped one by one below instead.
     "useOptionAsMetaKey": False,
-    "keyMapBoundKeys": {key: _placeholders(seq) for key, seq in KEY_MAP},
+    "keyMapBoundKeys": {key: _placeholders(seq)
+                        for key, seq in DEFAULT_MAP + KEY_MAP},
 }
 for i, key in enumerate(ANSI_KEYS):
     profile[key] = archived_color(PALETTE[f"Ansi {i}"])
