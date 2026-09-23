@@ -184,9 +184,13 @@ normal modifier so Option+a still types ą.
 
 What you give up, and the workaround:
 
-- **No split panes.** Terminal.app has tabs and windows only. `tmux` is the
-  answer; inside it, set the terminal-overrides for RGB or tmux strips the
-  24-bit colors back to 256 and the theme looks wrong again.
+- **No split panes in the iTerm2 sense.** `Cmd+D` does exist and splits the
+  window, but both halves show the *same* session with independent scroll
+  positions — handy for keeping earlier output in view, useless for running
+  two things side by side. For that: `tmux`, or macOS window tiling (two
+  Terminal windows snapped side by side, `fn+ctrl+arrows`). Inside tmux, set
+  the terminal-overrides for RGB or it strips the 24-bit colors back to 256
+  and the theme looks wrong again.
 - **Cmd is not remappable.** Terminal's keyboard map refuses Command entirely,
   so the Cmd+arrow / Cmd+Backspace line editing from the other profiles cannot
   be reproduced. `Ctrl+A` / `Ctrl+E` / `Ctrl+U` do the same jobs, and
