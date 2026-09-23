@@ -240,11 +240,34 @@ Regenerate the colors after a palette change with
 
 | | |
 |---|---|
+| **shift-arrows** | move between panes — **no prefix** |
 | `prefix \|` / `prefix -` | split right / down, keeping the directory |
 | `prefix` + arrows | move between panes (repeatable) |
-| `prefix` + shift-arrows | resize (repeatable) |
+| `prefix` + ctrl-arrows | resize (repeatable) |
 | `prefix c` | new window, keeping the directory |
+| `prefix z` | zoom the pane to the whole window, and back |
+| `prefix d` | detach; the session keeps running |
 | `prefix R` | reload the config |
+
+Shift+arrows are bound with `bind -n`, meaning no prefix at all. Keep that
+list short: a key bound that way is one vim, less and everything else inside
+tmux will never see. Shift+arrows are the free ones here — Ctrl+arrows and
+Option+arrows already carry word motion from `zsh/keybindings.zsh`.
+
+### Starting inside tmux automatically
+
+Off by default. `ZSH_AUTO_TMUX=1` in `~/.zshrc.local` makes every interactive
+shell attach to a session named `main`, creating it if needed. The guards in
+`zsh/tmux.zsh` keep it out of scripts, out of nested shells and out of IDE
+terminals.
+
+The reason to bother: **a shell started outside tmux cannot be moved into it
+later**. tmux would have to adopt a terminal it does not own, and nothing on
+macOS does that. So the choice to use tmux has to be made before the work
+starts, or not at all — auto-start makes it for you.
+
+The trade-off: every window attaching to `main` mirrors the same panes. For a
+second independent window, set `ZSH_AUTO_TMUX_SESSION=side` in it.
 
 The prefix stays the default `Ctrl+B`. The popular `Ctrl+A` swap is left
 commented out on purpose: it collides with beginning-of-line, and under

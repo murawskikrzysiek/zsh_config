@@ -20,3 +20,7 @@ source "$ZSH_CONFIG_DIR/zsh/prompt.zsh"   # keep last: syntax highlighting must 
 # PATH entries, machine-specific aliases. Loaded last so it can override
 # anything above.
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# Optional auto-start in tmux. Keep this last of all: it reads ZSH_AUTO_TMUX,
+# which ~/.zshrc.local above may set, and it hands the terminal to tmux.
+source "$ZSH_CONFIG_DIR/zsh/tmux.zsh"
