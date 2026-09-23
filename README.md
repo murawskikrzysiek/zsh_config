@@ -193,8 +193,14 @@ open terminal-app/headroom.terminal     # imports the profile
 ```
 
 Then Terminal, Settings, Profiles, select **Headroom**, **Default**. The
-profile carries the palette, JetBrains Mono NF at 12pt, and leaves Option as a
-normal modifier so Option+a still types ą.
+profile carries the palette, JetBrains Mono NF at 12pt, the key map, and
+leaves Option as a normal modifier so Option+a still types ą.
+
+The key map is the per-key kind, not "Use Option as Meta Key": Option+Backspace
+sends `ESC DEL`, fn+Delete `^D`, Option+fn+Delete `ESC d`, Ctrl+Backspace `^H`.
+Option+arrows already send `ESC b` / `ESC f` out of the box, so they are not
+in it. It shows up under the profile's Keyboard tab after the import; nothing
+to click there.
 
 What you give up, and the workaround:
 
@@ -208,20 +214,6 @@ What you give up, and the workaround:
   so the Cmd+arrow / Cmd+Backspace line editing from the other profiles cannot
   be reproduced. `Ctrl+A` / `Ctrl+E` / `Ctrl+U` do the same jobs, and
   `zsh/keybindings.zsh` binds Home/End (fn+arrows) as well.
-- Option+arrow word motion works through the sequences `zsh/keybindings.zsh`
-  binds directly, so nothing has to be mapped in the profile.
-- **Option+Backspace** (delete word) needs one manual mapping, the only one:
-  Settings, Profiles, Keyboard, `+`, key Delete with Option ticked, action
-  **Send Text**, and in the field press the `esc` key then `fn+Delete`. That
-  sends `ESC DEL`, which the shell already reads as delete-word. The same
-  place maps Control+Delete to whole-line deletion if the `Ctrl+Backspace`
-  default below does not come through.
-
-  Not generated into `terminal-app/headroom.terminal` on purpose: the profile
-  format stores those sequences as raw control characters, which no XML
-  writer here will emit, and the key-naming syntax could not be verified
-  against a real Mac from this repo. Ticking "Use Option as Meta key" is the
-  other route, at the cost of Option+letter diacritics.
 
 ### If Ghostty is not approved either
 

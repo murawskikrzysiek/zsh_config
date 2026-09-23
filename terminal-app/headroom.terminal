@@ -210,6 +210,17 @@
 	</data>
 	<key>columnCount</key>
 	<integer>120</integer>
+	<key>keyMapBoundKeys</key>
+	<dict>
+		<key>F728</key>
+		<string></string>
+		<key>^007F</key>
+		<string></string>
+		<key>~007F</key>
+		<string></string>
+		<key>~F728</key>
+		<string>d</string>
+	</dict>
 	<key>name</key>
 	<string>Headroom</string>
 	<key>rowCount</key>
