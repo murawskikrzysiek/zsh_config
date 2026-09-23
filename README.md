@@ -26,8 +26,8 @@ palettes.py         terminal color palettes, shared by both generators
 ghostty/            Ghostty config + themes + generator (default terminal)
 terminal-app/       Apple Terminal.app profile + generator
 iterm/              iTerm2 color presets + dynamic profile + generator
-Brewfile            all dependencies
-install.sh          bootstrap a machine
+Brewfile            shell dependencies (tools, plugins, font)
+install.sh          bootstrap a machine; terminals are opt-in arguments
 ```
 
 ## Install on a machine
@@ -40,21 +40,30 @@ git clone git@github.com:USER/zsh_config.git ~/dev/zsh_config
 exec zsh
 ```
 
-The installer:
+By default that installs the **shell only** — dependencies, `~/.zshrc`,
+`~/.zprofile`. No terminal is touched, and none is installed, until you name
+it:
 
-- installs every dependency from the Brewfile (tools, plugins, font)
-- backs up any existing `~/.zshrc` to `~/.zshrc.backup-<timestamp>` and
-  symlinks `~/.zshrc` into the repo
-- creates `~/.zprofile` with Homebrew shellenv if missing
-- symlinks `~/.config/ghostty/config` and the themes into the repo
-- installs the "Headroom" iTerm2 dynamic profile, but only if iTerm2 is
-  actually installed on the machine
-- prints the `export` / `alias` / `eval` / `source` lines found in the
-  replaced `.zshrc` so nothing silently disappears
+```
+./install.sh                        shell config only
+./install.sh ghostty                + Ghostty: its cask, config and themes
+./install.sh terminal-app           + import the Terminal.app profile
+./install.sh iterm                  + the iTerm2 dynamic profile
+./install.sh ghostty terminal-app   combine freely
+```
 
-Ghostty needs nothing else: colors, font and key bindings come from the
-config file. In iTerm2 one manual step remains — Settings, Profiles, select
-**Headroom**, Other Actions, **Set as Default Profile**.
+Which terminal is allowed differs per machine, so nothing is assumed. Each
+directory is self-contained: `ghostty/`, `iterm/` and `terminal-app/` never
+reference one another, and the shell config works the same under all three.
+
+The shell part always: installs the Brewfile dependencies (tools, plugins,
+font), backs up an existing `~/.zshrc` to `~/.zshrc.backup-<timestamp>`,
+symlinks `~/.zshrc` into the repo, creates `~/.zprofile` with Homebrew
+shellenv if missing, and prints the `export` / `alias` / `eval` / `source`
+lines from the replaced `.zshrc` so nothing silently disappears.
+
+Ghostty then needs nothing else. iTerm2 and Terminal.app each want their
+profile set as the default once, which the installer prints.
 
 ### Updating a machine that already has it
 
@@ -74,17 +83,13 @@ An existing hand-written `~/.config/ghostty/config` is moved aside to
 keep into `ghostty/config` here, or into `~/.config/ghostty/config.local`
 referenced from it, so the next pull keeps it.
 
-Two escape hatches, for machines where the defaults do not apply:
+Re-run it with the terminals you want on this machine; leave them out and
+they stay untouched. On a machine where IT owns the software list, or for a
+config-only refresh:
 
 ```
-SKIP_GHOSTTY=1 ./install.sh   # everything except Ghostty: cask and config
-SKIP_BREW=1 ./install.sh      # touch no Homebrew at all, only relink configs
+SKIP_BREW=1 ./install.sh
 ```
-
-`SKIP_GHOSTTY` is for a machine where Ghostty is not approved — the CLI tools
-and the Nerd Font still install, so iTerm2 or Terminal.app work fully.
-`SKIP_BREW` skips dependency installation entirely; use it when IT owns the
-software list, or for a config-only refresh.
 
 ### Migrating the old config
 
@@ -136,8 +141,9 @@ dynamic profile, which embeds the key mappings from `iterm/keyboard-map.json`.
 
 ## Terminals
 
-`ghostty/config` is the supported setup; `iterm/` is kept for machines where
-iTerm2 is still in use. Ghostty was picked as the default because it has no
+Three profiles ship, none of them installed unless asked for: `ghostty/`,
+`terminal-app/` (Apple Terminal) and `iterm/`. Pick per machine — the shell
+config is identical under all of them. Ghostty was picked as the default because it has no
 plugin or scripting runtime, no built-in AI/LLM integration, and no telemetry —
 a small attack surface is the easiest thing to defend in a security review.
 

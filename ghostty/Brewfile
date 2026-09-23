@@ -1,0 +1,8 @@
+# Ghostty itself. Separate from the top-level Brewfile so that a machine where
+# Ghostty is not approved never trips over it: install.sh only reads this file
+# when asked for Ghostty explicitly.
+#
+#   ./install.sh ghostty
+#
+# Keep it at 1.3.0 or newer — see the CVE note in ghostty/config.
+cask "ghostty"
