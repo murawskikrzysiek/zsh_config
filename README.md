@@ -256,10 +256,21 @@ Option+arrows already carry word motion from `zsh/keybindings.zsh`.
 
 ### Starting inside tmux automatically
 
-Off by default. `ZSH_AUTO_TMUX=1` in `~/.zshrc.local` makes every interactive
-shell attach to a session named `main`, creating it if needed. The guards in
-`zsh/tmux.zsh` keep it out of scripts, out of nested shells and out of IDE
-terminals.
+Off by default. `ZSH_AUTO_TMUX=1` in `~/.zshrc.local` makes an interactive
+shell attach to a session named `main`, creating it if needed.
+
+Even then it only fires in **Apple Terminal**. tmux is here to supply the
+panes that terminal lacks; iTerm2 and Ghostty split natively, so starting
+tmux in them would put two competing mechanisms on one screen. Widen it per
+machine if you disagree:
+
+```
+ZSH_AUTO_TMUX_TERMINALS="Apple_Terminal ghostty"   # space separated
+ZSH_AUTO_TMUX_TERMINALS="all"                      # anywhere
+```
+
+The other guards in `zsh/tmux.zsh` keep it out of scripts, nested shells and
+IDE terminals.
 
 The reason to bother: **a shell started outside tmux cannot be moved into it
 later**. tmux would have to adopt a terminal it does not own, and nothing on
