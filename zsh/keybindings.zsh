@@ -52,6 +52,21 @@ bindkey '^Z' _fancy-ctrl-z
 # not zsh's default "delete the whole line".
 bindkey '^U' backward-kill-line
 
+# ── Backspace variants ────────────────────────────────────────────────────────
+# Option+Backspace deletes the previous word, Ctrl+Backspace the whole line.
+# Terminals disagree on what they send, so both forms of each are bound rather
+# than trusting one: the profiles in this repo send the first of each pair.
+#
+# ESC DEL is also zsh's own default for backward-kill-word; kept explicit so
+# it is visible next to the rest.
+bindkey '^[^?' backward-kill-word   # Option+Backspace: ESC DEL
+bindkey '^[^H' backward-kill-word   # Option+Backspace: ESC BS, some terminals
+#
+# Ctrl+Backspace arrives as ^H (0x08) — the old ASCII backspace, while plain
+# Backspace sends DEL (0x7f). Binding it costs Ctrl+H as delete-a-character,
+# which Backspace itself does anyway. Drop this line to get Ctrl+H back.
+bindkey '^H' kill-whole-line
+
 # ── Edit long commands in $EDITOR ─────────────────────────────────────────────
 # Ctrl+X Ctrl+E opens the current command line in the editor; saving returns
 # it to the prompt.

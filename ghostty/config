@@ -38,6 +38,10 @@ keybind = cmd+right=text:\x05
 keybind = cmd+backspace=text:\x15
 # Option+Backspace: delete the previous word (ESC DEL)
 keybind = alt+backspace=text:\x1b\x7f
+# Ctrl+Backspace: delete the whole line. 0x08 is the old ASCII backspace,
+# distinct from the 0x7f plain Backspace sends, which is what lets
+# zsh/keybindings.zsh tell the two apart.
+keybind = ctrl+backspace=text:\x08
 # Fn+Delete: delete the character ahead (^D); with Option, the word ahead
 keybind = delete=text:\x04
 keybind = alt+delete=text:\x1bd

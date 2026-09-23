@@ -157,8 +157,11 @@ What the per-terminal files have to provide, whatever the terminal:
 - Option+arrows → `ESC b` / `ESC f`, Cmd+arrows → `^A` / `^E`,
   Cmd+Backspace → `^U`, Option+Backspace → `ESC DEL`, Fn+Delete → `^D`,
   Option+Fn+Delete → `ESC d` — this is what `zsh/keybindings.zsh` reacts to.
-  It also binds the xterm-style forms (`ESC [1;3D` and friends) and Home/End,
-  so word motion survives a terminal whose keys cannot be remapped at all
+  It also binds the xterm-style forms (`ESC [1;3D` and friends), Home/End and
+  both spellings of Option+Backspace, so editing survives a terminal whose
+  keys cannot be remapped at all
+- Ctrl+Backspace → `^H` (0x08), which deletes the whole line. Plain Backspace
+  keeps sending `0x7f`, which is what makes the two distinguishable
 
 Ghostty specifics worth knowing:
 
@@ -207,6 +210,18 @@ What you give up, and the workaround:
   `zsh/keybindings.zsh` binds Home/End (fn+arrows) as well.
 - Option+arrow word motion works through the sequences `zsh/keybindings.zsh`
   binds directly, so nothing has to be mapped in the profile.
+- **Option+Backspace** (delete word) needs one manual mapping, the only one:
+  Settings, Profiles, Keyboard, `+`, key Delete with Option ticked, action
+  **Send Text**, and in the field press the `esc` key then `fn+Delete`. That
+  sends `ESC DEL`, which the shell already reads as delete-word. The same
+  place maps Control+Delete to whole-line deletion if the `Ctrl+Backspace`
+  default below does not come through.
+
+  Not generated into `terminal-app/headroom.terminal` on purpose: the profile
+  format stores those sequences as raw control characters, which no XML
+  writer here will emit, and the key-naming syntax could not be verified
+  against a real Mac from this repo. Ticking "Use Option as Meta key" is the
+  other route, at the cost of Option+letter diacritics.
 
 ### If Ghostty is not approved either
 

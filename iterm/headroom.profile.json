@@ -155,6 +155,10 @@
           "Action": 11,
           "Text": "0x15"
         },
+        "0x7f-0x40000": {
+          "Action": 11,
+          "Text": "0x8"
+        },
         "0x7f-0x80000": {
           "Action": 11,
           "Text": "0x1b 0x7f"
