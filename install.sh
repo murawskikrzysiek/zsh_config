@@ -16,7 +16,17 @@ elif ! command -v brew >/dev/null 2>&1; then
   exit 1
 else
   echo "==> Installing dependencies from Brewfile"
-  brew bundle --file="$REPO_DIR/Brewfile"
+  BREWFILE="$REPO_DIR/Brewfile"
+  # SKIP_GHOSTTY=1 installs everything except the Ghostty cask, for machines
+  # where it is not approved. The font cask still goes in — the prompt glyphs
+  # need it whichever terminal you end up with.
+  if [[ "${SKIP_GHOSTTY:-0}" == 1 ]]; then
+    echo "    SKIP_GHOSTTY=1: leaving the Ghostty cask out"
+    BREWFILE="$(mktemp -t Brewfile.XXXXXX)"
+    trap 'rm -f "$BREWFILE"' EXIT
+    grep -v '^cask "ghostty"' "$REPO_DIR/Brewfile" > "$BREWFILE"
+  fi
+  brew bundle --file="$BREWFILE"
 fi
 
 if [[ -e "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
@@ -42,6 +52,9 @@ fi
 # Ghostty reads ~/.config/ghostty/config on launch and on reload. Symlinked, so
 # a git pull updates the live config.
 GHOSTTY_DIR="$HOME/.config/ghostty"
+if [[ "${SKIP_GHOSTTY:-0}" == 1 ]]; then
+  echo "==> SKIP_GHOSTTY=1: not touching $GHOSTTY_DIR"
+else
 echo "==> Installing Ghostty config -> $GHOSTTY_DIR"
 mkdir -p "$GHOSTTY_DIR/themes"
 if [[ -e "$GHOSTTY_DIR/config" && ! -L "$GHOSTTY_DIR/config" ]]; then
@@ -52,6 +65,7 @@ ln -sfn "$REPO_DIR/ghostty/config" "$GHOSTTY_DIR/config"
 for theme in "$REPO_DIR"/ghostty/themes/*; do
   ln -sfn "$theme" "$GHOSTTY_DIR/themes/$(basename "$theme")"
 done
+fi
 
 # ── iTerm2 (only if it is actually installed) ────────────────────────────────
 # iTerm2 reads this directory on launch, so installing before its first run
@@ -69,10 +83,15 @@ fi
 
 echo "==> Done. Remaining manual steps:"
 echo "    1. Restart the terminal (or open a new tab) and run: exec zsh"
-echo "       Ghostty picks up colors, font and key bindings from the config"
-echo "       above; nothing to click."
+if [[ "${SKIP_GHOSTTY:-0}" != 1 ]]; then
+  echo "       Ghostty picks up colors, font and key bindings from the config"
+  echo "       above; nothing to click."
+fi
 if [[ "$ITERM_INSTALLED" == true ]]; then
   echo "    2. iTerm2 only: Settings > Profiles > Headroom > Other Actions >"
   echo "       Set as Default Profile — this applies the Nerd Font and colors."
   echo "       Without it, prompt glyphs render as boxes."
 fi
+echo "    Apple Terminal.app instead? Import its profile once:"
+echo "       open $REPO_DIR/terminal-app/headroom.terminal"
+echo "       then Terminal > Settings > Profiles > Headroom > Default."

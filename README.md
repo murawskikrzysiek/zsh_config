@@ -74,15 +74,17 @@ An existing hand-written `~/.config/ghostty/config` is moved aside to
 keep into `ghostty/config` here, or into `~/.config/ghostty/config.local`
 referenced from it, so the next pull keeps it.
 
-If Homebrew must not run — locked-down machine, casks installed by IT, or you
-just want the config files relinked:
+Two escape hatches, for machines where the defaults do not apply:
 
 ```
-SKIP_BREW=1 ./install.sh
+SKIP_GHOSTTY=1 ./install.sh   # everything except Ghostty: cask and config
+SKIP_BREW=1 ./install.sh      # touch no Homebrew at all, only relink configs
 ```
 
-Ghostty then has to be installed separately; everything else is already there
-from the previous run.
+`SKIP_GHOSTTY` is for a machine where Ghostty is not approved — the CLI tools
+and the Nerd Font still install, so iTerm2 or Terminal.app work fully.
+`SKIP_BREW` skips dependency installation entirely; use it when IT owns the
+software list, or for a config-only refresh.
 
 ### Migrating the old config
 
