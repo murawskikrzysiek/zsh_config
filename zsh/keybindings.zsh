@@ -20,9 +20,14 @@ bindkey '^[[1;3D' backward-word      # alt+left  (xterm style)
 bindkey '^[[1;3C' forward-word       # alt+right
 bindkey '^[^[[D'  backward-word      # alt+left  (ESC-prefixed, Option-as-Meta)
 bindkey '^[^[[C'  forward-word
-bindkey '^[[1;5D' backward-word      # ctrl+left, the habit from Linux
-bindkey '^[[1;5C' forward-word
 bindkey '^[[3;3~' kill-word          # alt+fn+delete
+
+# Ctrl+arrows: start / end of line. Mirrors Ctrl+Backspace, which deletes the
+# whole line, so Ctrl means "line" and Option means "word" on every key. Also
+# the only line jump on Terminal.app, where Cmd+arrows cannot be mapped. Every
+# terminal here sends the xterm form on its own; nothing to map.
+bindkey '^[[1;5D' beginning-of-line  # ctrl+left
+bindkey '^[[1;5C' end-of-line        # ctrl+right
 
 # Home / End, including the fn+arrow form. On Terminal.app these replace the
 # Cmd+arrow bindings that cannot be mapped there.

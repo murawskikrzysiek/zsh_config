@@ -155,8 +155,10 @@ What the per-terminal files have to provide, whatever the terminal:
 - the 16 ANSI colors plus background/foreground/cursor/selection, true color
 - a Nerd Font, or `p10k`'s glyphs render as boxes
 - Option+arrows → `ESC b` / `ESC f`, Cmd+arrows → `^A` / `^E`,
-  Cmd+Backspace → `^U`, Option+Backspace → `ESC DEL`, Fn+Delete → `^D`,
-  Option+Fn+Delete → `ESC d` — this is what `zsh/keybindings.zsh` reacts to.
+  Ctrl+arrows → start / end of line (the xterm `ESC [1;5D` form every
+  terminal sends), Cmd+Backspace → `^U`, Option+Backspace → `ESC DEL`,
+  Fn+Delete → `^D`, Option+Fn+Delete → `ESC d` — this is what
+  `zsh/keybindings.zsh` reacts to.
   It also binds the xterm-style forms (`ESC [1;3D` and friends), Home/End and
   both spellings of Option+Backspace, so editing survives a terminal whose
   keys cannot be remapped at all
@@ -212,8 +214,9 @@ What you give up, and the workaround:
   tiling, two Terminal windows snapped side by side with `fn+ctrl+arrows`.
 - **Cmd is not remappable.** Terminal's keyboard map refuses Command entirely,
   so the Cmd+arrow / Cmd+Backspace line editing from the other profiles cannot
-  be reproduced. `Ctrl+A` / `Ctrl+E` / `Ctrl+U` do the same jobs, and
-  `zsh/keybindings.zsh` binds Home/End (fn+arrows) as well.
+  be reproduced. `Ctrl+arrows` jump to the start / end of the line instead,
+  `Ctrl+Backspace` deletes it, and `zsh/keybindings.zsh` binds Home/End
+  (fn+arrows) as well.
 
 ### If Ghostty is not approved either
 
@@ -259,7 +262,7 @@ Regenerate the colors after a palette change with
 Shift+arrows are bound with `bind -n`, meaning no prefix at all. Keep that
 list short: a key bound that way is one vim, less and everything else inside
 tmux will never see. Shift+arrows are the free ones here — Ctrl+arrows and
-Option+arrows already carry word motion from `zsh/keybindings.zsh`.
+Option+arrows already carry line and word motion from `zsh/keybindings.zsh`.
 
 ### Starting inside tmux automatically
 
