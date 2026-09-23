@@ -100,10 +100,15 @@ keybind = global:cmd+intl_backslash=toggle_visibility
 # keybind = global:cmd+intl_backslash=toggle_quick_terminal
 
 # ── Clipboard and safety ─────────────────────────────────────────────────────
-# These match Ghostty's current defaults; pinned explicitly so a future change
-# of defaults cannot loosen them quietly. `ask` means a program reading the
-# clipboard via OSC 52 needs a confirmation; paste protection warns before
-# pasting text containing newlines or control characters.
+# Keep Ghostty at 1.3.0 or newer. CVE-2026-26982 (GHSA-4jxv-xgrp-5m3r, CVSS
+# 6.3) let control characters hidden in pasted or dropped text run commands;
+# the fix is in the binary, not in these options, so the version floor is what
+# actually protects you. `brew upgrade --cask ghostty` keeps it current.
+#
+# The settings below match Ghostty's current defaults, pinned explicitly so a
+# future change of defaults cannot loosen them quietly. `ask` means a program
+# reading the clipboard via OSC 52 needs a confirmation; paste protection
+# warns before pasting text containing newlines or control characters.
 clipboard-read = ask
 clipboard-write = allow
 clipboard-paste-protection = true
